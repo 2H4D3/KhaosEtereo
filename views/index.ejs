@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<%- include('partials/head') %>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="main-container" id="main-content">
+    <!-- Home -->
+    <section id="section-home" class="section active">
+      <div class="hero">
+        <h1>KHÁOS-ETÉREO</h1>
+        <p class="hero-text">O Vácuo Infinito onde Vida e Ganância Colidem</p>
+        <%- include('../public/img/ophion.svg') %>
+        <button class="hero-btn" onclick="navigateTo('echion')">Conheça o Último Echion</button>
+      </div>
+      <div class="grid-3">
+        <div class="card card-home">
+          <h3>🌌 O Universo</h3>
+          <p>Surgido do <strong>Primeiro Suspiro de Ophion</strong>. Aqui o vácuo é um oceano de éter, poeira viva e correntes magnéticas.</p>
+        </div>
+        <div class="card card-home">
+          <h3>🐋 Aetherichthyes</h3>
+          <p>Criaturas que evoluíram diretamente no vácuo, nadando como em água. De minúsculos plânctons a colossais Mantóides-Reis.</p>
+        </div>
+        <div class="card card-home">
+          <h3>⚠️ A Caçada</h3>
+          <p>O <span class="badge badge-danger">Icor Primordial</span> – sangue estelar que concede milênios de vida – move impérios inteiros.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bestiário -->
+    <section id="section-bestiario" class="section">
+      <h2 class="section-title">Bestiário do Éter</h2>
+      <input type="text" id="search-best" class="search-box" placeholder="🔍 Buscar criatura..." onkeyup="filterBestiario()">
+      <div class="tabs" id="bestiario-tabs">
+        <% const categorias = { fluidantes:'Fluidantes', bracosDoVazio:'Braços do Vazio', nadadoresEstelares:'Nadadores Estelares', caçadoresDeQuitina:'Caçadores de Quitina', cortantes:'Cortantes', vagalumesDoEter:'Vagalumes do Éter', lendas:'Lendas' }; %>
+        <% let activeCat = true; %>
+        <% for (let [key, label] of Object.entries(categorias)) { %>
+          <button class="tab-btn <%= activeCat ? 'active' : '' %>" onclick="openBestTab(event,'<%= key %>')"><%= label %></button>
+          <% activeCat = false; %>
+        <% } %>
+      </div>
+      <% activeCat = true; %>
+      <% for (let [key, label] of Object.entries(categorias)) { %>
+        <div id="tab-<%= key %>" class="tab-content <%= activeCat ? 'active' : '' %>">
+          <div class="grid-3" id="grid-<%= key %>">
+            <% data.bestiario[key].forEach(creature => { %>
+              <div class="card creature-card" data-search="<%= creature.nome %> <%= creature.desc %>">
+                <div class="card-title"><%= creature.nome %></div>
+                <p><%= creature.desc %></p>
+                <span class="badge badge-purple">Tam: <%= creature.tam %></span>
+                <span class="badge badge-info"><%= creature.hab %></span>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+        <% activeCat = false; %>
+      <% } %>
+    </section>
+
+    <!-- Planetas -->
+    <section id="section-planetas" class="section">
+      <h2 class="section-title">Sistemas & Planetas</h2>
+      <div class="grid-2" id="grid-planetas">
+        <% data.planetas.forEach(p => { %>
+          <div class="card planet-card">
+            <div class="card-title"><%= p.nome %></div>
+            <div class="card-subtitle">Sistema <%= p.sistema %> | <%= p.raca %></div>
+            <p><%= p.desc %></p>
+            <span class="badge <%= p.perigo==='Extremo'?'badge-danger':p.perigo==='Alto'?'badge-warning':'badge-info' %>">Perigo: <%= p.perigo %></span>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- Civilizações -->
+    <section id="section-civilizacoes" class="section">
+      <h2 class="section-title">Civilizações</h2>
+      <div class="grid-2" id="grid-civ">
+        <% data.civilizacoes.forEach(c => { %>
+          <div class="card civ-card">
+            <h3><%= c.nome %></h3>
+            <p><strong><%= c.raca %></strong> – <%= c.governo %></p>
+            <p>Tecnologia: <%= c.tech %></p>
+            <p class="obscuro">⚠️ <%= c.obscuro %></p>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- Flora -->
+    <section id="section-flora" class="section">
+      <h2 class="section-title">Flora Cósmica</h2>
+      <div class="grid-3">
+        <% data.flora.forEach(f => { %>
+          <div class="card flora-card">
+            <h3><%= f.nome %></h3>
+            <p><%= f.desc %></p>
+            <span class="badge badge-purple"><%= f.tipo %></span>
+            <span class="badge badge-info"><%= f.habitat %></span>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+    <!-- Echion -->
+    <section id="section-echion" class="section">
+      <h2 class="section-title"><%= data.echion.nome %></h2>
+      <div class="echion-card">
+        <h3 style="color:var(--neon-purple)"><%= data.echion.titulo %></h3>
+        <p><strong>Altura:</strong> <%= data.echion.altura %></p>
+        <p><strong>Corpo:</strong> <%= data.echion.corpo %></p>
+        <p><strong>Voz:</strong> <%= data.echion.voz %></p>
+        <p><strong>Olhos:</strong> <%= data.echion.olhos %></p>
+        <h4>Habilidades:</h4>
+        <ul>
+          <% data.echion.habilidades.forEach(h => { %>
+            <li>✦ <%= h %></li>
+          <% }) %>
+        </ul>
+        <p><strong>Missão:</strong> <%= data.echion.missao %></p>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+  <canvas id="particles-canvas"></canvas>
+  <script src="/js/main.js"></script>
+</body>
+</html>
